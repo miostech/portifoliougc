@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { listPlan } from "@/lib/actions/video";
+import { listPlan, type PlanItem } from "@/lib/actions/video";
 import { PageHeader } from "@/components/app/page-header";
 import { RecordingPlan } from "@/components/video/recording-plan";
 import { buttonVariants } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = { title: "Plano de gravação" };
 
 export default async function PlanoDeGravacaoPage() {
-  let items = [];
+  let items: PlanItem[] = [];
   try {
     items = await listPlan();
   } catch {

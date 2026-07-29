@@ -58,7 +58,7 @@ export function ModelLibrary({
   function onToggleFav(id: string) {
     setFavs((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) { next.delete(id); } else { next.add(id); }
       return next;
     });
     start(async () => {
