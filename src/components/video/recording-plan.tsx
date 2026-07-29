@@ -11,7 +11,6 @@ import {
 } from "@/lib/actions/video";
 import type { PlanStatus } from "@/models/RecordingPlanItem";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 const STATUS: { key: PlanStatus; label: string; color: string }[] = [

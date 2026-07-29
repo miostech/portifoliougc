@@ -53,6 +53,7 @@ export interface SectionView {
 }
 
 export interface PortfolioView {
+  portfolioId?: string;
   slug: string;
   fullName: string;
   username: string;
@@ -111,6 +112,7 @@ export function toPortfolioView(
   const theme = (p.theme ?? {}) as AnyRecord;
 
   return {
+    portfolioId: String(p._id ?? ""),
     slug: (p.slug as string) ?? "",
     fullName: (profile.fullName as string) ?? "",
     username: (profile.username as string) ?? (p.slug as string) ?? "",

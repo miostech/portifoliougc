@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPublicPortfolio } from "@/lib/portfolio-data";
+import { recordPortfolioVisit } from "@/lib/actions/analytics";
 import { PortfolioRenderer } from "@/components/portfolio/portfolio-renderer";
 
 export async function generateMetadata({
@@ -37,6 +38,9 @@ export default async function PublicPortfolioPage({
   const { slug } = await params;
   const portfolio = await getPublicPortfolio(slug).catch(() => null);
   if (!portfolio) notFound();
+
+  // Record visit — fire-and-forget, never blocks rendering
+  if (portfolio.portfolioId) void recordPortfolioVisit(portfolio.portfolioId);
 
   return (
     <div className="min-h-dvh bg-neutral-100 py-0 sm:py-8">

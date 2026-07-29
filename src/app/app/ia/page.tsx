@@ -1,24 +1,26 @@
 import type { Metadata } from "next";
 import { Sparkles } from "lucide-react";
+import { auth } from "@/lib/auth";
+import { planHasFeature } from "@/lib/plans";
 import { PageHeader } from "@/components/app/page-header";
-import { EmptyState } from "@/components/app/empty-state";
+import { AIAssistant } from "@/components/ia/ai-assistant";
 
 export const metadata: Metadata = { title: "Assistente IA" };
 
-export default function AssistenteIAPage() {
+export default async function AssistenteIAPage() {
+  const session = await auth();
+  const plan = (session?.user as { plan?: string } | undefined)?.plan ?? "none";
+  const isPro = planHasFeature(plan as never, "ai_assistant");
+
   return (
-    <div className="mx-auto max-w-4xl">
+    <div className="mx-auto max-w-3xl">
       <PageHeader
         title="Assistente IA"
         description="Melhore a bio, crie headlines, roteiros e mensagens de prospeção para marcas."
-      />
-      <EmptyState
-        icon={Sparkles}
-        title="Assistente a caminho"
-        description="O chat com ações rápidas e histórico chega na Fase 5. No modo demo, respostas são simuladas."
-        actionHref="/app"
-        actionLabel="Voltar ao painel"
-      />
+      >
+        <Sparkles className="size-5 text-primary opacity-70" />
+      </PageHeader>
+      <AIAssistant isPro={isPro} />
     </div>
   );
 }
