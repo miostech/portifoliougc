@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
-import { BarChart3 } from "lucide-react";
+import { getPlatformAnalytics } from "@/lib/actions/admin";
 import { PageHeader } from "@/components/app/page-header";
-import { EmptyState } from "@/components/app/empty-state";
+import { AdminPlatformAnalytics } from "@/components/admin/admin-platform-analytics";
 
-export const metadata: Metadata = { title: "Analytics (admin)" };
+export const metadata: Metadata = { title: "Analytics da plataforma (admin)" };
 
-export default function AdminAnalyticsPage() {
+export default async function AdminAnalyticsPage() {
+  let data = null;
+  try {
+    data = await getPlatformAnalytics();
+  } catch {
+    data = null;
+  }
+
   return (
     <div className="mx-auto max-w-6xl">
       <PageHeader
         title="Analytics da plataforma"
-        description="Crescimento de utilizadores, uso da IA, templates e modelos mais usados."
+        description="Visitas, eventos e uso agregado de todos os portfólios."
       />
-      <EmptyState
-        icon={BarChart3}
-        title="Analytics administrativo na Fase 6"
-        description="Gráficos agregados da plataforma serão implementados com o seed."
-      />
+      <AdminPlatformAnalytics data={data} />
     </div>
   );
 }

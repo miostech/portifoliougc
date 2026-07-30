@@ -1,22 +1,30 @@
 import type { Metadata } from "next";
-import { CreditCard } from "lucide-react";
+import { getSubscriptionSummary, listSubscriptions } from "@/lib/actions/admin";
 import { PageHeader } from "@/components/app/page-header";
-import { EmptyState } from "@/components/app/empty-state";
+import { AdminSubscriptionsView } from "@/components/admin/admin-subscriptions-view";
 
 export const metadata: Metadata = { title: "Assinaturas (admin)" };
 
-export default function AdminSubscriptionsPage() {
+export default async function AdminSubscriptionsPage() {
+  let summary = null;
+  let subs = null;
+  try {
+    [summary, subs] = await Promise.all([
+      getSubscriptionSummary(),
+      listSubscriptions(),
+    ]);
+  } catch {
+    summary = null;
+    subs = null;
+  }
+
   return (
     <div className="mx-auto max-w-6xl">
       <PageHeader
         title="Assinaturas"
-        description="Acompanhe planos, estados, receita simulada e cancelamentos."
+        description="Acompanhe planos, estados e receita simulada (MRR demo)."
       />
-      <EmptyState
-        icon={CreditCard}
-        title="Gestão de assinaturas na Fase 6"
-        description="Lista de assinaturas e métricas de receita serão implementadas com o seed."
-      />
+      <AdminSubscriptionsView summary={summary} subs={subs ?? []} dbOffline={!summary} />
     </div>
   );
 }

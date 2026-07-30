@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
-import { Users } from "lucide-react";
+import { listUsers } from "@/lib/actions/admin";
 import { PageHeader } from "@/components/app/page-header";
-import { EmptyState } from "@/components/app/empty-state";
+import { AdminUsersTable } from "@/components/admin/admin-users-table";
 
-export const metadata: Metadata = { title: "Utilizadores" };
+export const metadata: Metadata = { title: "Utilizadores (admin)" };
 
-export default function AdminUsersPage() {
+export default async function AdminUsersPage() {
+  let users = null;
+  try {
+    users = await listUsers();
+  } catch {
+    users = null;
+  }
+
   return (
     <div className="mx-auto max-w-6xl">
       <PageHeader
         title="Utilizadores"
-        description="Pesquise, filtre, altere planos, suspenda ou promova utilizadores."
+        description="Pesquise, filtre, altere planos, suspenda ou promova utilizadores a admin."
       />
-      <EmptyState
-        icon={Users}
-        title="Gestão de utilizadores na Fase 6"
-        description="A tabela com pesquisa, filtros e ações administrativas será implementada com o seed."
-      />
+      <AdminUsersTable initialUsers={users ?? []} dbOffline={!users} />
     </div>
   );
 }
